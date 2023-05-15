@@ -2,7 +2,20 @@
 
 {% block content %}
     <h1>Task</h1>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod, fuga cum! Nulla maiores at et minima asperiores natus facilis quisquam, enim corporis soluta, provident autem reiciendis. Ex mollitia laboriosam reprehenderit!
-    </p>
+    <ul>
+        {% for task in tasks %}
+            <a href="{% url 'taskDetail' task.id %}">
+                <li>
+                    {%if task.important%}
+                        <h1>{{task.title}} is Completed</h1>
+                    {%else%}
+                        <h2>{{task.title}} is not  Completed</h2>
+                    {% endif %}
+                    
+                    <p>{{task.description}}</p>
+                    <p>{{task.user.username}}</p>
+                </li>
+            </a>
+        {% endfor %}
+    </ul>
 {% endblock content %}

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import task
+from .models import Task
 # Register your models here.
 
 class TaskAdmin(admin.ModelAdmin):
     readonly_fields=("created",)
 
-admin.site.register(task, TaskAdmin)
+admin.site.register(Task, TaskAdmin)

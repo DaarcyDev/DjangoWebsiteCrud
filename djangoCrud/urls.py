@@ -23,6 +23,11 @@ urlpatterns = [
     path("", views.home, name="index"),
     path("singup/", views.singup, name="signup"),
     path("task/", views.task, name="task"),
+    path("task/create/", views.createTask, name="createTask"),
+    path("task/<int:taskId>/", views.taskDetail,name="taskDetail"),
     path("logout/", views.signout, name="logout"),
-    path("signin/", views.signin,name="signin")
+    path("signin/", views.signin,name="signin"),
+    
+    
+    
 ]
