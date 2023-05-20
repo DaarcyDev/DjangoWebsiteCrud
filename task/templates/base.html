@@ -12,18 +12,18 @@
             <li>
                 <a href="{% url 'index' %}">home</a>
             </li>
-            
-            
-
             {% if user.is_authenticated %}
             <li>
-                <a href="{% url 'task' %}">Task</a>
+                <a href="{% url 'taskPending' %}">Task Pending</a>
             </li>
             <li>
                 <a href="{% url 'logout' %}">LogOut </a>
             </li>
             <li>
                 <a href="{% url 'createTask' %}">create Task</a>
+            </li>
+            <li>
+                <a href="{% url 'taskComplete' %}">Task Complete</a>
             </li>
             {% else %}
             <li>

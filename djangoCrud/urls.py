@@ -22,12 +22,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="index"),
     path("singup/", views.singup, name="signup"),
-    path("task/", views.task, name="task"),
+    path("taskPending/", views.taskPending, name="taskPending"),
+    path("taskComplete/", views.taskComplete, name="taskComplete"),
     path("task/create/", views.createTask, name="createTask"),
     path("task/<int:taskId>/", views.taskDetail,name="taskDetail"),
+    path("task/<int:taskId>/complete/", views.completeTask,name="completeTask"),
+    path("task/<int:taskId>/delete/", views.deleteTask,name="deleteTask"),
     path("logout/", views.signout, name="logout"),
     path("signin/", views.signin,name="signin"),
-    
-    
-    
 ]

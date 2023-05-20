@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .forms import TaksForm 
 from .models import Task
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -13,9 +15,7 @@ def home(request):
         "form": UserCreationForm
     })
 
-
 def singup(request): 
-
     if request.method == "GET":
         return render(request, "singup.html", {
             "form": UserCreationForm
@@ -23,7 +23,7 @@ def singup(request):
     else:
         if (request.POST['password1'] == request.POST['password2']):
             try:
-                user = User.objects.create_user(
+                user = User.objects.create_user( 
                     username=request.POST["username"], password=request.POST["password1"])
                 user.save()
                 login(request, user)
@@ -33,27 +33,15 @@ def singup(request):
                     "form": UserCreationForm,
                     "error": "user already exist"
                 })
-
         else:
             return render(request, "singup.html", {
                 "form": UserCreationForm,
                 "error": "password dont match"
             })
 
-        print(request.POST)
-        print("obteniendo datos")
-
-def task(request):
-    task = Task.objects.filter(user=request.user)
-
-    return render(request, "task.html",{
-        "tasks" : task
-    })
-
 def signout (request):
     logout(request)
     return redirect("index")
-
 
 def signin(request):
     if request.method == "GET":
@@ -73,7 +61,16 @@ def signin(request):
         else:
             login(request, user)
             return redirect("task") 
-        
+
+@login_required
+def taskPending(request):
+    task = Task.objects.filter(user=request.user, dateCompleted__isnull=True)
+
+    return render(request, "taskPending.html",{
+        "tasks" : task
+    })
+
+@login_required 
 def createTask(request):
 
     if request.method == "GET":
@@ -94,8 +91,48 @@ def createTask(request):
                 "error":"please provide valide data"
             })
 
+@login_required
 def taskDetail(request, taskId):
-    task = get_object_or_404(Task,pk=taskId)
-    return render(request, "taskDetail.html",{
-        "tasks": task
+    if(request.method == "GET"):
+        task = get_object_or_404(Task,pk=taskId, user=request.user)
+        form = TaksForm(instance=task )
+        return render(request, "taskDetail.html",{
+            "tasks": task,
+            "form" : form
+        })
+    else:
+        try:
+                
+            task = get_object_or_404(Task,pk=taskId, user=request.user)
+            form = TaksForm(request.POST, instance=task)
+            form.save()
+            return redirect('task')
+        except ValueError:
+            return render(request, "taskDetail.html",{
+                "tasks": task,
+                "form" : form,
+                "error" : "please provide valide data"
+            })
+
+@login_required
+def completeTask(request, taskId):
+    task = get_object_or_404(Task,pk=taskId, user=request.user)
+    if request.method == "POST":
+        task.dateCompleted = timezone.now()
+        task.save()
+        return redirect("taskComplete")
+
+@login_required
+def deleteTask(request, taskId):
+    task = get_object_or_404(Task,pk=taskId, user=request.user)
+    if request.method == "POST":
+        task.delete()
+        return redirect("taskPending")
+
+@login_required
+def taskComplete(request):
+    task = Task.objects.filter(user=request.user, dateCompleted__isnull=False).order_by('-dateCompleted')
+
+    return render(request, "taskComplete.html",{
+        "tasks" : task
     })
