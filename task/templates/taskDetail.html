@@ -1,28 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Task Detail</h1>
-    <h2>{{tasks.title}}</h2>
-    <h3>{{tasks.description}}</h3>
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 mt -5">
 
-    {{error}}
+            <form action="" method="POST">
+                <h1>Task Detail</h1>
+                <h2>{{tasks.title}}</h2>
+                <h3>{{tasks.description}}</h3>
+            
+                {{error}}
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary">
+                    save
+                </button>
+            </form>
+            <form action="{% url 'completeTask' tasks.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-secondary">
+                    complete
+                </button>
+            </form>
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button>save</button>
-    </form>
-    <form action="{% url 'completeTask' tasks.id %}" method="POST">
-        {% csrf_token %}
-        <button>
-            complete
-        </button>
-    </form>
-
-    <form action="{% url 'deleteTask' tasks.id %}" method="POST">
-        {% csrf_token %}
-        <button>
-            Delete
-        </button>
-    </form>
+            <form action="{% url 'deleteTask' tasks.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-danger">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
 {% endblock content %}

@@ -1,8 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>HOME</h1>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod, fuga cum! Nulla maiores at et minima asperiores natus facilis quisquam, enim corporis soluta, provident autem reiciendis. Ex mollitia laboriosam reprehenderit!
-    </p>
+
+<main class="container py-5">
+    <section class="card card-body">
+        <h1 class="display-1 text-center">DJANGO APP </h1>
+        <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod, fuga cum! Nulla maiores at et minima asperiores natus facilis quisquam, enim corporis soluta, provident autem reiciendis. Ex mollitia laboriosam reprehenderit!
+        </p>
+        <div class="text-center">
+            <a href="{% url 'signin' %}" class="btn btn-dark">
+                Signin
+            </a>
+            <a href="{% url 'signup' %}" class="btn btn-secondary">
+                Signup
+            </a>
+        </div>
+         
+    </section>
+</main>
+
+
 {% endblock content %}

@@ -27,7 +27,7 @@ def singup(request):
                     username=request.POST["username"], password=request.POST["password1"])
                 user.save()
                 login(request, user)
-                return  redirect("task")
+                return  redirect("index")
             except:
                 return render(request, "singup.html", {
                     "form": UserCreationForm,
@@ -60,7 +60,7 @@ def signin(request):
             })
         else:
             login(request, user)
-            return redirect("task") 
+            return redirect("index") 
 
 @login_required
 def taskPending(request):
@@ -84,7 +84,7 @@ def createTask(request):
             newTask = form.save(commit=False )
             newTask.user = request.user
             newTask.save()
-            return  redirect("task")
+            return  redirect("taskPending")
         except ValueError:
             return render(request, 'createTask.html', {
                 "form":TaksForm,
@@ -106,7 +106,7 @@ def taskDetail(request, taskId):
             task = get_object_or_404(Task,pk=taskId, user=request.user)
             form = TaksForm(request.POST, instance=task)
             form.save()
-            return redirect('task')
+            return redirect('taskPending')
         except ValueError:
             return render(request, "taskDetail.html",{
                 "tasks": task,
